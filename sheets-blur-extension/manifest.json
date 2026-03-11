@@ -14,9 +14,9 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+      "16": "icons/ssIcon16.png",
+      "48": "icons/ssIcon48.png",
+      "128": "icons/ssIcon128.png"
     }
   },
   "content_scripts": [
