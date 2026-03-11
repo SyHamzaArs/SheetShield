@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SheetShield</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0d0d1a;
+      --surface: #13132a;
+      --border:  #2a2a4a;
+      --accent:  #00d4ff;
+      --text:    #e8e8f0;
+      --muted:   #6a6a8a;
+    }
+
+    body {
+      width: 300px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* HEADER */
+    .header {
+      padding: 18px 20px 14px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, #0d0d1a, #131330);
+    }
+    .logo-row { display: flex; align-items: center; gap: 10px; margin-bottom: 3px; }
+    .logo-icon {
+      width: 30px; height: 30px;
+      background: #00d4ff11; border: 1px solid #00d4ff33; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 15px;
+    }
+    .logo-name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; }
+    .logo-name span { color: var(--accent); }
+    .tagline { font-size: 11px; color: var(--muted); padding-left: 40px; }
+
+    /* STATUS */
+    .status-row {
+      padding: 12px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .status-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .status-right { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); transition: all 0.3s; }
+    .dot.active { background: #22c55e; box-shadow: 0 0 8px #22c55e99; }
+
+    /* TOGGLE */
+    .toggle-section { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+    .toggle-btn {
+      width: 100%; padding: 13px;
+      border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text);
+      font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.2s;
+    }
+    .toggle-btn:hover { border-color: var(--accent); box-shadow: 0 0 14px #00d4ff18; }
+    .toggle-btn.enabled {
+      background: #001e2e; border-color: var(--accent); color: var(--accent);
+      box-shadow: 0 0 18px #00d4ff18;
+    }
+
+    /* BLUR LEVEL */
+    .level-section { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .section-label {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px;
+    }
+    .level-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .level-btn {
+      padding: 10px 6px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+      font-family: 'Space Grotesk', sans-serif; font-size: 11px; font-weight: 600;
+      cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 6px;
+      transition: all 0.2s;
+    }
+    .level-btn:hover { border-color: var(--accent); color: var(--text); }
+    .level-btn.selected { border-color: var(--accent); background: #001e2e; color: var(--accent); }
+    .level-preview {
+      font-family: 'Space Mono', monospace; font-size: 13px;
+      font-weight: 700; letter-spacing: 0.05em; user-select: none;
+    }
+    .preview-light  { filter: blur(1px); }
+    .preview-medium { filter: blur(2.5px); }
+    .preview-heavy  { filter: blur(4px); }
+
+    /* FOOTER */
+    .footer { padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .sheet-url { font-size: 10px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 210px; }
+    .version { font-size: 10px; color: var(--border); font-family: 'Space Mono', monospace; }
+
+    /* NOT SHEETS */
+    .not-sheets { padding: 28px 20px; text-align: center; display: none; }
+    .not-sheets-icon { font-size: 34px; margin-bottom: 10px; }
+    .not-sheets-title { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+    .not-sheets-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo-row">
+    <div class="logo-icon">🛡</div>
+    <div class="logo-name">Sheet<span>Shield</span></div>
+  </div>
+  <div class="tagline">Hide sensitive data for screen sharing &amp; photos</div>
+</div>
+
+<div id="main-content">
+  <div class="status-row">
+    <span class="status-label">Shield Status</span>
+    <div class="status-right">
+      <div class="dot" id="status-dot"></div>
+      <span id="status-text">Inactive</span>
+    </div>
+  </div>
+
+  <div class="toggle-section">
+    <button class="toggle-btn" id="toggle-btn">
+      <span id="toggle-icon">🔒</span>
+      <span id="toggle-label">Enable Shield</span>
+    </button>
+  </div>
+
+  <div class="level-section">
+    <div class="section-label">Blur Intensity</div>
+    <div class="level-grid">
+      <button class="level-btn" data-level="light">
+        <span class="level-preview preview-light">1234</span>
+        <span>Light</span>
+      </button>
+      <button class="level-btn selected" data-level="medium">
+        <span class="level-preview preview-medium">1234</span>
+        <span>Medium</span>
+      </button>
+      <button class="level-btn" data-level="heavy">
+        <span class="level-preview preview-heavy">1234</span>
+        <span>Heavy</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="sheet-url" id="sheet-url">—</span>
+    <span class="version">v6.0</span>
+  </div>
+</div>
+
+<div id="not-sheets" class="not-sheets">
+  <div class="not-sheets-icon">📊</div>
+  <div class="not-sheets-title">Not a Google Sheet</div>
+  <div class="not-sheets-sub">Open a Google Sheets document to use SheetShield.</div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
