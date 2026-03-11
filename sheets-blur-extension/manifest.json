@@ -14,9 +14,9 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "icons/ssIcon48.png",
-      "48": "icons/ssIcon48.png",
-      "128": "icons/ssIcon128.png"
+      "16": "SheetShieldLogo.png",
+      "48": "SheetShieldLogo.png",
+      "128": "SheetShieldLogo.png"
     }
   },
   "content_scripts": [
@@ -28,8 +28,8 @@
     }
   ],
   "icons": {
-    "16": "icons/ssIcon16.png",
-    "48": "icons/ssIcon48.png",
-    "128": "icons/ssIcon128.png"
+    "16": "SheetShieldLogo.png",
+    "48": "SheetShieldLogo.png",
+    "128": "SheetShieldLogo.png"
   }
 }
