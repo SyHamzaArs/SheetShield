@@ -1,0 +1,1 @@
+SheetShield is a simple toggle-able Google Chrome extension which allows the user to blur their Google Sheets screen. This allows the preservation of sensitive data when sharing screens, taking photos or recording video.
